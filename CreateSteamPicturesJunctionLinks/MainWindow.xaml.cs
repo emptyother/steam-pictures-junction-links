@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Media;
 using CreateSteamPicturesJunctionLinks.Classes;
 using Microsoft.Win32;
 
@@ -17,7 +13,7 @@ namespace CreateSteamPicturesJunctionLinks
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
 		public List<SteamGame> Gamelist = new List<SteamGame>();
 		public MainWindow()
@@ -51,7 +47,7 @@ namespace CreateSteamPicturesJunctionLinks
 			}
 		}
 
-		private void inputSteamFolder_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+		private void inputSteamFolder_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			Gamelist.Clear();
 			var folder = new DirectoryInfo(InputSteamFolder.Text).FullName + Properties.Settings.Default.SteamPicturesSubFolder;
@@ -62,14 +58,6 @@ namespace CreateSteamPicturesJunctionLinks
 				Gamelist.Add(game);
 			}
 			DatagridFoldersToProcess.ItemsSource = Gamelist;
-			//foreach (SteamGame item in DatagridFoldersToProcess.ItemsSource)
-			//{
-			//	var row = DatagridFoldersToProcess.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-			//	if (row != null && String.IsNullOrEmpty(item.GameName))
-			//	{
-			//		row.Background = Brushes.LightPink;
-			//	}
-			//}
 		}
 
 		private void InputSteamFolder_Loaded(object sender, RoutedEventArgs e)
@@ -79,7 +67,7 @@ namespace CreateSteamPicturesJunctionLinks
 
 			if (regKey != null)
 			{
-				var installpath = regKey.GetValue("SteamPath").ToString().Replace('/','\\');
+				var installpath = regKey.GetValue("SteamPath").ToString().Replace('/', '\\');
 				InputSteamFolder.Text = installpath;
 			}
 		}
@@ -87,6 +75,30 @@ namespace CreateSteamPicturesJunctionLinks
 		private void InputPicturesFolder_Loaded(object sender, RoutedEventArgs e)
 		{
 			InputPicturesFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+		}
+
+		private void BtnRename_Click(object sender, RoutedEventArgs e)
+		{
+			var selectedSteamGame = (SteamGame)DatagridFoldersToProcess.SelectedItem;
+			if (selectedSteamGame != null)
+			{
+				var inputDialog = new SetGameName(selectedSteamGame.GameName) { Owner = this };
+				if (inputDialog.ShowDialog() == true)
+				{
+					selectedSteamGame.GameName = inputDialog.InputText;
+				}
+			}
+			DatagridFoldersToProcess.Items.Refresh();
+		}
+
+		private void DatagridFoldersToProcess_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			BtnRename.IsEnabled = (DatagridFoldersToProcess.SelectedItem != null);
+		}
+
+		private void DatagridFoldersToProcess_LayoutUpdated(object sender, EventArgs e)
+		{
+			BtnStartProcess.IsEnabled = (Gamelist.Count(g => (String.IsNullOrEmpty(g.GameName)) && g.GameName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0) == 0);
 		}
 	}
 }

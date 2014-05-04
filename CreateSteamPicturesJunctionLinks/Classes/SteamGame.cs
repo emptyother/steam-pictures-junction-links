@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security;
 using System.Web.Script.Serialization;
-using System.Windows.Controls;
 
 namespace CreateSteamPicturesJunctionLinks.Classes
 {
@@ -23,14 +21,11 @@ namespace CreateSteamPicturesJunctionLinks.Classes
 				{
 					return String.Join("", SteamData.name.Split(Path.GetInvalidFileNameChars()));
 				}
-				else if (_gamename == null)
+				if (_gamename == null)
 				{
 					return "";
 				}
-				else
-				{
-					return _gamename;
-				}
+				return _gamename;
 			}
 			set { _gamename = value; }
 		}		

@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:classes="clr-namespace:CreateSteamPicturesJunctionLinks.Classes" x:Class="CreateSteamPicturesJunctionLinks.MainWindow"
-        Title="Create Steam Pictures Junction Links" Height="429" Width="525" Icon="Resources/steampictures.ico">
+        Title="Create Steam Pictures Junction Links" Height="429" Width="654" Icon="Resources/steampictures.ico" MinWidth="350" MinHeight="270">
 	<Grid>
 		<Label x:Name="LabelSteamFolder" Content="Steam folder:" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="23" />
 		<Label x:Name="LabelPicturesFolder" Content="Your screenshot folder:" HorizontalAlignment="Left" Margin="10,34,0,0" VerticalAlignment="Top" Height="23" />
@@ -10,16 +10,18 @@
 		<TextBox x:Name="InputPicturesFolder" Height="23" Margin="148,34,115,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Loaded="InputPicturesFolder_Loaded"/>
 		<Button x:Name="BtnSteamFolder" Content="Change..." Margin="0,6,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnSteamFolder_Click" HorizontalAlignment="Right"/>
 		<Button x:Name="BtnPicturesFolder" Content="Change..." Margin="0,34,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnPicturesFolder_Click" HorizontalAlignment="Right"/>
-		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,62,10,108" >
+		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,62,10,108" SelectionMode="Single" IsReadOnly="True" SelectionChanged="DatagridFoldersToProcess_SelectionChanged" LayoutUpdated="DatagridFoldersToProcess_LayoutUpdated" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding GameName}" Value="">
 							<Setter Property="Background" Value="LightPink"></Setter>
 						</DataTrigger>
-					</Style.Triggers>					
+					</Style.Triggers>
 				</Style>
 			</DataGrid.RowStyle>
 		</DataGrid>
+		<Button x:Name="BtnRename" Content="Set folder name" HorizontalAlignment="Center" Margin="0,0,0,40" Width="234" Height="20" VerticalAlignment="Bottom" Click="BtnRename_Click" IsEnabled="False"/>
+		<Button x:Name="BtnStartProcess" Content="Create Junction Links" Margin="0,0,0,10" Height="20" VerticalAlignment="Bottom" Width="234" HorizontalAlignment="Center" IsEnabled="False"/>
 	</Grid>
 </Window>
