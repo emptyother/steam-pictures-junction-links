@@ -21,11 +21,7 @@ namespace CreateSteamPicturesJunctionLinks.Classes
 				{
 					return String.Join("", SteamData.name.Split(Path.GetInvalidFileNameChars()));
 				}
-				if (_gamename == null)
-				{
-					return "";
-				}
-				return _gamename;
+				return _gamename ?? "";
 			}
 			set { _gamename = value; }
 		}		

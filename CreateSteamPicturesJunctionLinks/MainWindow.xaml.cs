@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using CreateSteamPicturesJunctionLinks.Classes;
 using Microsoft.Win32;
+using MessageBox = System.Windows.MessageBox;
 
 namespace CreateSteamPicturesJunctionLinks
 {
@@ -94,11 +95,66 @@ namespace CreateSteamPicturesJunctionLinks
 		private void DatagridFoldersToProcess_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			BtnRename.IsEnabled = (DatagridFoldersToProcess.SelectedItem != null);
+			BtnPreview.IsEnabled = (DatagridFoldersToProcess.SelectedItem != null);
 		}
 
 		private void DatagridFoldersToProcess_LayoutUpdated(object sender, EventArgs e)
 		{
 			BtnStartProcess.IsEnabled = (Gamelist.Count(g => (String.IsNullOrEmpty(g.GameName)) && g.GameName.IndexOfAny(Path.GetInvalidFileNameChars()) < 0) == 0);
+			if (Gamelist.Count(g => (String.IsNullOrEmpty(g.GameName))) == 0)
+			{
+				LabelErrorText.Visibility = Visibility.Hidden;
+			}
+			else
+			{
+				LabelErrorText.Visibility = Visibility.Visible;
+			}
+		}
+
+		private void BtnStartProcess_Click(object sender, RoutedEventArgs e)
+		{
+			var picturesDirectory = new DirectoryInfo(InputPicturesFolder.Text);
+			if (!picturesDirectory.Exists)
+			{
+				MessageBox.Show(this, "Could not find output folder.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
+			foreach (var game in Gamelist)
+			{
+				var pictureFolder = new DirectoryInfo(picturesDirectory.FullName + "\\" + game.GameName);
+				if (!pictureFolder.Exists)
+				{					
+					Directory.CreateDirectory(pictureFolder.FullName);
+				}
+				MoveContentOfFolder(game.SteamScreenshotSubFolder, pictureFolder);
+				Directory.Delete(game.SteamScreenshotSubFolder.FullName);				
+				JunctionPoint.Create(game.SteamScreenshotSubFolder.FullName, pictureFolder.FullName, true);
+			}
+			MessageBox.Show(this, "Done.", "Created junction links", MessageBoxButton.OK, MessageBoxImage.Information);
+			this.Close();
+		}
+
+		private static void MoveContentOfFolder(DirectoryInfo source, DirectoryInfo destination)
+		{
+			var files = source.GetFiles("*", SearchOption.TopDirectoryOnly);
+			var directories = source.GetDirectories();
+			foreach (var file in files.Where(file => !new FileInfo(destination + "\\" + file.Name).Exists))
+			{
+				file.MoveTo(destination + "\\" + file.Name);
+			}
+			foreach (var dir in directories)
+			{
+				dir.MoveTo(dir.FullName.Replace(source.FullName, destination.FullName));
+			}
+		}
+
+		private void BtnPreview_Click(object sender, RoutedEventArgs e)
+		{
+			var selectedSteamGame = (SteamGame)DatagridFoldersToProcess.SelectedItem;
+			if (selectedSteamGame == null) return;
+
+			var inputDialog = new PreviewImage(selectedSteamGame.SteamScreenshotSubFolder) { Owner = this };
+			inputDialog.ShowDialog();
 		}
 	}
 }

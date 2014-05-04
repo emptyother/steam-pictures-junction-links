@@ -10,7 +10,7 @@
 		<TextBox x:Name="InputPicturesFolder" Height="23" Margin="148,34,115,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Loaded="InputPicturesFolder_Loaded"/>
 		<Button x:Name="BtnSteamFolder" Content="Change..." Margin="0,6,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnSteamFolder_Click" HorizontalAlignment="Right"/>
 		<Button x:Name="BtnPicturesFolder" Content="Change..." Margin="0,34,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnPicturesFolder_Click" HorizontalAlignment="Right"/>
-		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,62,10,108" SelectionMode="Single" IsReadOnly="True" SelectionChanged="DatagridFoldersToProcess_SelectionChanged" LayoutUpdated="DatagridFoldersToProcess_LayoutUpdated" >
+		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,62,10,130" SelectionMode="Single" IsReadOnly="True" SelectionChanged="DatagridFoldersToProcess_SelectionChanged" LayoutUpdated="DatagridFoldersToProcess_LayoutUpdated" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
 					<Style.Triggers>
@@ -21,7 +21,9 @@
 				</Style>
 			</DataGrid.RowStyle>
 		</DataGrid>
+		<Label x:Name="LabelErrorText" Content="Screenshots from a non-steam game found. Set name manually." HorizontalAlignment="Center" Margin="0,0,0,95" VerticalAlignment="Bottom" Foreground="Red"/>
+		<Button x:Name="BtnPreview" Content="Preview a screenshot" HorizontalAlignment="Center" Margin="0,0,0,70" Width="234" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Click="BtnPreview_Click"/>
 		<Button x:Name="BtnRename" Content="Set folder name" HorizontalAlignment="Center" Margin="0,0,0,40" Width="234" Height="20" VerticalAlignment="Bottom" Click="BtnRename_Click" IsEnabled="False"/>
-		<Button x:Name="BtnStartProcess" Content="Create Junction Links" Margin="0,0,0,10" Height="20" VerticalAlignment="Bottom" Width="234" HorizontalAlignment="Center" IsEnabled="False"/>
+		<Button x:Name="BtnStartProcess" Content="Create Junction Links" Margin="0,0,0,10" Height="20" VerticalAlignment="Bottom" Width="234" HorizontalAlignment="Center" IsEnabled="False" Click="BtnStartProcess_Click"/>		
 	</Grid>
 </Window>
