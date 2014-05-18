@@ -9,7 +9,7 @@ namespace CreateSteamPicturesJunctionLinks
 	/// <summary>
 	/// Interaction logic for PreviewImage.xaml
 	/// </summary>
-	public partial class PreviewImage : Window
+	public partial class PreviewImage
 	{
 		public PreviewImage(DirectoryInfo folder)
 		{
@@ -30,7 +30,7 @@ namespace CreateSteamPicturesJunctionLinks
 
 		private void BtnClose_Click(object sender, RoutedEventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 	}
 }

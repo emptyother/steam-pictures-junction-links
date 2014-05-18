@@ -1,7 +1,8 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:classes="clr-namespace:CreateSteamPicturesJunctionLinks.Classes" x:Class="CreateSteamPicturesJunctionLinks.MainWindow"
+	xmlns:classes="clr-namespace:CreateSteamPicturesJunctionLinks.Classes"
+	x:Class="CreateSteamPicturesJunctionLinks.MainWindow"
         Title="Create Steam Pictures Junction Links" Height="429" Width="654" Icon="Resources/steampictures.ico" MinWidth="350" MinHeight="270">
 	<Grid>
 		<Label x:Name="LabelSteamFolder" Content="Steam folder:" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top" Height="23" />
@@ -10,20 +11,31 @@
 		<TextBox x:Name="InputPicturesFolder" Height="23" Margin="148,34,115,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Loaded="InputPicturesFolder_Loaded"/>
 		<Button x:Name="BtnSteamFolder" Content="Change..." Margin="0,6,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnSteamFolder_Click" HorizontalAlignment="Right"/>
 		<Button x:Name="BtnPicturesFolder" Content="Change..." Margin="0,34,10,0" VerticalAlignment="Top" Height="23" Width="100" Click="btnPicturesFolder_Click" HorizontalAlignment="Right"/>
-		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,62,10,130" SelectionMode="Single" IsReadOnly="True" SelectionChanged="DatagridFoldersToProcess_SelectionChanged" LayoutUpdated="DatagridFoldersToProcess_LayoutUpdated" >
+		<ComboBox x:Name="DropdownUserId" Margin="148,62,115,0" VerticalAlignment="Top" SelectionChanged="dropdownUserId_SelectionChanged"/>
+		<DataGrid x:Name="DatagridFoldersToProcess" Margin="10,96,10,130" SelectionMode="Single" IsReadOnly="True" SelectionChanged="DatagridFoldersToProcess_SelectionChanged" LayoutUpdated="DatagridFoldersToProcess_LayoutUpdated" AutoGenerateColumns="False" ColumnWidth="*" >
+			<DataGrid.Columns>
+				<DataGridTextColumn Binding="{Binding GameName}" Header="Game Name" Width="Auto"/>
+				<DataGridTextColumn Binding="{Binding NewFolder}" Header="New folder" Width="*"/>
+			</DataGrid.Columns>
 			<DataGrid.RowStyle>
-				<Style TargetType="DataGridRow">
+				<Style TargetType="{x:Type DataGridRow}">
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding GameName}" Value="">
-							<Setter Property="Background" Value="LightPink"></Setter>
+							<Setter Property="Background" Value="LightPink"/>
 						</DataTrigger>
 					</Style.Triggers>
 				</Style>
 			</DataGrid.RowStyle>
+			<DataGrid.DataContext>
+				<classes:SteamGame/>
+			</DataGrid.DataContext>
 		</DataGrid>
-		<Label x:Name="LabelErrorText" Content="Screenshots from a non-steam game found. Set name manually." HorizontalAlignment="Center" Margin="0,0,0,95" VerticalAlignment="Bottom" Foreground="Red"/>
+		<Label x:Name="LabelErrorText" Content="Screenshots from a non-steam game found. Set name manually." HorizontalAlignment="Center" Margin="0,0,0,95" VerticalAlignment="Bottom" Foreground="Red" Visibility="Hidden"/>
+		<ProgressBar x:Name="ProgressReadingNames" Margin="10,0,10,95" Height="26" VerticalAlignment="Bottom" Value="50" Visibility="Hidden" />
+		<Label x:Name="LabelProgressBar" Content="Reading names from steam server..." HorizontalAlignment="Center" Margin="0,0,0,95" VerticalAlignment="Bottom" Visibility="Hidden"/>
 		<Button x:Name="BtnPreview" Content="Preview a screenshot" HorizontalAlignment="Center" Margin="0,0,0,70" Width="234" Height="20" VerticalAlignment="Bottom" IsEnabled="False" Click="BtnPreview_Click"/>
 		<Button x:Name="BtnRename" Content="Set folder name" HorizontalAlignment="Center" Margin="0,0,0,40" Width="234" Height="20" VerticalAlignment="Bottom" Click="BtnRename_Click" IsEnabled="False"/>
-		<Button x:Name="BtnStartProcess" Content="Create Junction Links" Margin="0,0,0,10" Height="20" VerticalAlignment="Bottom" Width="234" HorizontalAlignment="Center" IsEnabled="False" Click="BtnStartProcess_Click"/>		
+		<Button x:Name="BtnStartProcess" Content="Create Junction Links" Margin="0,0,0,10" Height="20" VerticalAlignment="Bottom" Width="234" HorizontalAlignment="Center" IsEnabled="False" Click="BtnStartProcess_Click"/>
+		<Label x:Name="LabelUserId" Content="Steam User id:" HorizontalAlignment="Left" Margin="11,61,0,0" VerticalAlignment="Top" Height="23" />
 	</Grid>
 </Window>
