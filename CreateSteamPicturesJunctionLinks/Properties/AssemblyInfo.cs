@@ -1,14 +1,15 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CreateSteamPicturesJunctionLinks")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A small application to create Junction Links from the Steam screenshot folder to your own picturefolder, organized by game name. It retrieves the game's name from the steam servers before creating the folders.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Only Human")]
 [assembly: AssemblyProduct("CreateSteamPicturesJunctionLinks")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
@@ -51,3 +52,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: NeutralResourcesLanguageAttribute("en")]

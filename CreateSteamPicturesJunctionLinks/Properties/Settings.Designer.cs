@@ -25,46 +25,10 @@ namespace CreateSteamPicturesJunctionLinks.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\userdata\\22055574\\760\\remote")]
-        public string SteamPicturesSubFolder {
-            get {
-                return ((string)(this["SteamPicturesSubFolder"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\screenshots")]
-        public string ScreenshotSubfolder {
-            get {
-                return ((string)(this["ScreenshotSubfolder"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://store.steampowered.com/api/appdetails/?appids={0}")]
         public string SteamDatabaseURL {
             get {
                 return ((string)(this["SteamDatabaseURL"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\Spill\\steam")]
-        public string SteamFolder {
-            get {
-                return ((string)(this["SteamFolder"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\SkyDrive\\Pictures\\Spill")]
-        public string PicturesFolder {
-            get {
-                return ((string)(this["PicturesFolder"]));
             }
         }
     }

@@ -2,20 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CreateSteamPicturesJunctionLinks.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SteamPicturesSubFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\userdata\22055574\760\remote</Value>
-    </Setting>
-    <Setting Name="ScreenshotSubfolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\screenshots</Value>
-    </Setting>
     <Setting Name="SteamDatabaseURL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://store.steampowered.com/api/appdetails/?appids={0}</Value>
-    </Setting>
-    <Setting Name="SteamFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">E:\Spill\steam</Value>
-    </Setting>
-    <Setting Name="PicturesFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">E:\SkyDrive\Pictures\Spill</Value>
     </Setting>
   </Settings>
 </SettingsFile>
