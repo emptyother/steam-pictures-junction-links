@@ -8,8 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using CreateSteamPicturesJunctionLinks.Classes;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
+using SearchOption = System.IO.SearchOption;
 
 namespace CreateSteamPicturesJunctionLinks
 {
@@ -34,6 +37,7 @@ namespace CreateSteamPicturesJunctionLinks
 			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
 				InputSteamFolder.Text = dialog.SelectedPath;
+				WriteOption("SteamFolder", dialog.SelectedPath);
 			}
 		}
 
@@ -44,10 +48,9 @@ namespace CreateSteamPicturesJunctionLinks
 				RootFolder = Environment.SpecialFolder.Desktop,
 				SelectedPath = InputPicturesFolder.Text
 			};
-			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-			{
-				InputPicturesFolder.Text = dialog.SelectedPath;
-			}
+			if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+			InputPicturesFolder.Text = dialog.SelectedPath;
+			WriteOption("PicturesFolder", dialog.SelectedPath);
 		}
 
 		private void inputSteamFolder_TextChanged(object sender, TextChangedEventArgs e)
@@ -76,7 +79,7 @@ namespace CreateSteamPicturesJunctionLinks
 					MessageBox.Show(this, "Could not find Steam user folders.", "Folders not found", MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}
-			catch(DirectoryNotFoundException)
+			catch (DirectoryNotFoundException)
 			{
 				MessageBox.Show(this, "Could not find Steam userdata folder.", "Folder not found", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
@@ -127,12 +130,12 @@ namespace CreateSteamPicturesJunctionLinks
 
 			if (regKey == null) return;
 			var installpath = regKey.GetValue("SteamPath").ToString().Replace('/', '\\');
-			InputSteamFolder.Text = installpath;
+			InputSteamFolder.Text = ReadOption("SteamFolder") ?? installpath;
 		}
 
 		private void InputPicturesFolder_Loaded(object sender, RoutedEventArgs e)
 		{
-			InputPicturesFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+			InputPicturesFolder.Text = ReadOption("PicturesFolder") ?? Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 		}
 
 		private void BtnRename_Click(object sender, RoutedEventArgs e)
@@ -173,11 +176,19 @@ namespace CreateSteamPicturesJunctionLinks
 			{
 				var pictureFolder = new DirectoryInfo(picturesDirectory.FullName + "\\" + game.GameName);
 				if (!pictureFolder.Exists)
-				{					
+				{
 					Directory.CreateDirectory(pictureFolder.FullName);
 				}
 				MoveContentOfFolder(game.SteamScreenshotSubFolder, pictureFolder);
-				Directory.Delete(game.SteamScreenshotSubFolder.FullName);				
+				try
+				{
+					FileSystem.DeleteDirectory(game.SteamScreenshotSubFolder.FullName, DeleteDirectoryOption.ThrowIfDirectoryNonEmpty);
+				}
+				catch (IOException)
+				{
+					MessageBox.Show(this, String.Format("Error deleting directory {0}, there is still files there i was unable to delete. Move the files manually to {1} before i can create junction link.",game.SteamScreenshotSubFolder.FullName, pictureFolder), "Error", MessageBoxButton.OK);
+					return;
+				}
 				JunctionPoint.Create(game.SteamScreenshotSubFolder.FullName, pictureFolder.FullName, true);
 			}
 			MessageBox.Show(this, "Done.", "Created junction links", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -190,11 +201,13 @@ namespace CreateSteamPicturesJunctionLinks
 			var directories = source.GetDirectories();
 			foreach (var file in files.Where(file => !new FileInfo(destination + "\\" + file.Name).Exists))
 			{
-				file.MoveTo(destination + "\\" + file.Name);
+				var destinationFile = destination + "\\" + file.Name;
+				FileSystem.MoveFile(file.FullName, destinationFile, true);
 			}
 			foreach (var dir in directories)
 			{
-				dir.MoveTo(dir.FullName.Replace(source.FullName, destination.FullName));
+				FileSystem.MoveDirectory(dir.FullName, dir.FullName.Replace(source.FullName, destination.FullName), true);
+				dir.Attributes |= FileAttributes.Hidden;
 			}
 		}
 
@@ -205,6 +218,39 @@ namespace CreateSteamPicturesJunctionLinks
 
 			var inputDialog = new PreviewImage(selectedSteamGame.SteamScreenshotSubFolder) { Owner = this };
 			inputDialog.ShowDialog();
+		}
+		private static void WriteOption(string keyName, object value)
+		{
+			try
+			{
+				if (Application.UserAppDataRegistry != null)
+				{
+					Application.UserAppDataRegistry.SetValue(keyName, value);
+				}
+			}
+			// ReSharper disable once EmptyGeneralCatchClause
+			catch
+			{
+				//Ignore. I COULD write to eventlog, but then i would need an installer 
+				//or ask the user for admin rights, and i want to keep this portable.
+			}
+		}
+		private static string ReadOption(string keyName)
+		{
+			try
+			{
+				if (Application.UserAppDataRegistry != null)
+				{
+					return Application.UserAppDataRegistry.GetValue(keyName).ToString();
+				}
+			}
+			// ReSharper disable once EmptyGeneralCatchClause
+			catch
+			{
+				//Ignore. I COULD write to eventlog, but then i would need an installer 
+				//or ask the user for admin rights, and i want to keep this portable.
+			}
+			return null;
 		}
 	}
 }

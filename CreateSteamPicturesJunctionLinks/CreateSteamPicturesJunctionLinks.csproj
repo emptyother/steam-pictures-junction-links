@@ -56,6 +56,7 @@
     <ApplicationIcon>Resources\steampictures.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
