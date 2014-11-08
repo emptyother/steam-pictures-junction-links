@@ -206,8 +206,9 @@ namespace CreateSteamPicturesJunctionLinks
 			}
 			foreach (var dir in directories)
 			{
-				FileSystem.MoveDirectory(dir.FullName, dir.FullName.Replace(source.FullName, destination.FullName), true);
-				dir.Attributes |= FileAttributes.Hidden;
+				var destinationFolder = new DirectoryInfo(dir.FullName.Replace(source.FullName, destination.FullName));
+				FileSystem.MoveDirectory(dir.FullName, destinationFolder.FullName, true);
+				destinationFolder.Attributes |= FileAttributes.Hidden;
 			}
 		}
 
