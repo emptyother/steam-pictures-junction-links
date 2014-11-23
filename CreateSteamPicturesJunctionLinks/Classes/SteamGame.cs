@@ -67,8 +67,8 @@ namespace CreateSteamPicturesJunctionLinks.Classes
 			using (var reader = new StreamReader(response.GetResponseStream()))
 			{
 				var js = new JavaScriptSerializer();
-				var obj = js.Deserialize<Dictionary<string, JsonResponseData>>(reader.ReadToEnd());
-				result = obj[_steamId];
+				var obj = js.Deserialize<Dictionary<string, JsonResponseData>>(reader.ReadToEnd());				
+				result = obj.First().Value;
 			}
 			return result;
 		}
